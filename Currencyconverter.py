@@ -33,16 +33,13 @@ class CurrencyConverter:
 
             if user_currency in conv_rates or accepted_currency in conv_rates:
                     print(f"{amount} {user_currency} = {convert:.2f} {accepted_currency}")
-
-        except user_currency not in conv_rates or accepted_currency not in conv_rates:
-                raise UnknownCurrency
-            
         except requests.exceptions.ConnectionError:
             while True:
                 print("Cant connect to network")
                 prompt = input("Would you like to use our offline services, yes/no: ")
                 prompt = prompt.lower().strip()
                 if prompt == "yes":
+                    print("The only available currencies are USD, JPY, GBP, NGN")
                     user_currency = input("Enter the currency currently being used: ")
                     user_currency= user_currency.upper().strip()
 
@@ -72,6 +69,8 @@ class CurrencyConverter:
                     break
                 else:
                     print("Incorrect response. Please answer with a yes/no")
+        except user_currency not in conv_rates or accepted_currency not in conv_rates:
+            raise UnknownCurrency
         except Exception as e:
             print(f"Error: {e}")
 

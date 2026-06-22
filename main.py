@@ -3,19 +3,28 @@ class UnknownCurrency(Exception):
     pass
 
 class CurrencyConverter:
+    def __init__(self):
+        self.rates = None
+
     def exchange_rates(self):
         url = "https://v6.exchangerate-api.com/v6/2be5e59eb106bfa66422abfd/latest/USD"
         try:
             response = requests.get(url)
             print(response.status_code)
             response.raise_for_status()
-            data = response.json
+            data = response.json()
             conv_rates = data["conversion_rates"]
+            self.rates = conv_rates
             print("Currency exchange rates have been successfully retrieved")
+            return conv_rates
         except requests.exceptions.ConnectionError:
             print("No internet connection\nPlease try again later")
+            self.rates = None
+            return None
         except Exception as e:
             print(f"Error: {e}")
+            self.rates = None
+            return None
 
 roll = CurrencyConverter()
 roll.exchange_rates()

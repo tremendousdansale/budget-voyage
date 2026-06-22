@@ -33,6 +33,8 @@ class CurrencyConverter:
 
             if user_currency in conv_rates or accepted_currency in conv_rates:
                     print(f"{amount} {user_currency} = {convert:.2f} {accepted_currency}")
+        except user_currency not in conv_rates or accepted_currency not in conv_rates:
+            raise UnknownCurrency
         except requests.exceptions.ConnectionError:
             while True:
                 print("Cant connect to network")
@@ -69,8 +71,6 @@ class CurrencyConverter:
                     break
                 else:
                     print("Incorrect response. Please answer with a yes/no")
-        except user_currency not in conv_rates or accepted_currency not in conv_rates:
-            raise UnknownCurrency
         except Exception as e:
             print(f"Error: {e}")
 

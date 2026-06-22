@@ -73,7 +73,3 @@ class CurrencyConverter:
                     print("Incorrect response. Please answer with a yes/no")
         except Exception as e:
             print(f"Error: {e}")
-
-roll = CurrencyConverter(USD=1, NGN=1357.59, GBP= 0.74, JPY= 160.35)
-roll.exchange_rates()
-

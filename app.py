@@ -1,4 +1,6 @@
 import streamlit as st
+from dotenv import load_dotenv
+load_dotenv()
 
 from trip_budget import show_trip_budget_page
 

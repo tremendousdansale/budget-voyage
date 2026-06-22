@@ -16,7 +16,6 @@ class BudgetReport:
         self.remaining_budget = total_budget - self.total_spent
 
     def to_dict(self):
-        """Converts all the budget data into a dictionary."""
         return {
             "destination":      self.destination,
             "total_budget":     self.total_budget,
@@ -30,12 +29,10 @@ class BudgetReport:
         }
 
     def save_to_json(self, filename="trip_budget.json"):
-        """Saves the budget data to a JSON file."""
         with open(filename, "w") as json_file:
             json.dump(self.to_dict(), json_file, indent=4)
 
     def save_to_csv(self, filename="trip_budget.csv"):
-        """Saves the budget data to a CSV file."""
         data = self.to_dict()
         with open(filename, "w", newline="") as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=data.keys())

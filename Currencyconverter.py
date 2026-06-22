@@ -73,3 +73,6 @@ class CurrencyConverter:
                     print("Incorrect response. Please answer with a yes/no")
         except Exception as e:
             print(f"Error: {e}")
+
+c = CurrencyConverter(USD=1, NGN=1357.59, GBP= 0.74, JPY= 160.35)
+c.exchange_rates()

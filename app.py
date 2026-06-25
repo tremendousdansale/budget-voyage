@@ -59,7 +59,7 @@ def show_currency_converter_page():
 st.sidebar.title("Menu")
 page = st.sidebar.radio(
     "Choose a section",
-    ["Travel Budget Planner", "Currency Converter"],
+    ["Travel Budget Planner", "Currency Converter"]
 )
 
 if page == "Travel Budget Planner":

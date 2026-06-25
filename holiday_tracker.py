@@ -1,6 +1,28 @@
 import requests
 import datetime
+import streamlit as st
 class Holiday_checker:
+    def show_holiday_checker_page(self):
+        st.title("Holiday Checker")
+        country_code = st.text_input("Enter country code (e.g US, NG, GB):", value = "")
+        trip_date = st.text_input("Enter the travel date (YYYY-MM-DD): ", value="")
+        if st.button("Check Holiday"):
+            if country_code == "" or trip_date == "":
+                st.warning("Please fill in both the country code and trip date")
+                return
+            if not self.validate_date(trip_date):
+                st.error("Invalid date format. Please use YYYY-MM-DD e.g 2025-06-28")
+                return
+            days = self.days_until_trip(trip_date)
+            if days < 0:
+                st.error("The date selected has already passed.")
+                return
+            holiday = self.check_holiday(country_code, trip_date)
+            if holiday:
+                st.warning("The selected date is a public holiday")
+            else:
+                st.success("The selected date is not on a public holiday ")
+
     def validate_date(self, date):
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
@@ -50,3 +72,4 @@ Check = Holiday_checker()
 country_code = input("Enter the country code(e.g NG, US, GB): ").upper().strip()
 trip_date = input("Enter the travel date (YYYY-MM-DD): ")
 Check.main(country_code, trip_date)
+        

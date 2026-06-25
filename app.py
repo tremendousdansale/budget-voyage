@@ -1,24 +1,29 @@
-import requests
 import streamlit as st
-from trip_budget import show_trip_budget_page
+import requests
+from dotenv import load_dotenv
+import os
 
+# Load environment variables (make sure GEMINI_API_KEY is in your .env file)
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+from trip_budget import show_trip_budget_page
+from travel_advisor import TravelAdvisor
+
+# -------------------- Streamlit Config --------------------
 st.set_page_config(page_title="Currency and Travel Budget Planner")
 
-CURRENCIES = [
-    "USD",
-    "EUR",
-    "GBP",
-    "JPY",
-    "NGN",
-    "CAD",
-    "AUD",
-    "CHF",
-    "CNY",
-    "KES",
-    "GHS",
-    "ZAR",
-]
+st.sidebar.title("Menu")
+page = st.sidebar.radio(
+    "Choose a section",
+    ["Travel Budget Planner", "Currency Converter"],
+)
 
+# -------------------- Currency Converter --------------------
+CURRENCIES = [
+    "USD", "EUR", "GBP", "JPY", "NGN", "CAD", "AUD",
+    "CHF", "CNY", "KES", "GHS", "ZAR",
+]
 
 def show_currency_converter_page():
     st.title("Currency Converter")
@@ -55,14 +60,30 @@ def show_currency_converter_page():
         except Exception as err:
             st.error(f"An unexpected error occurred: {err}")
 
-
-st.sidebar.title("Menu")
-page = st.sidebar.radio(
-    "Choose a section",
-    ["Travel Budget Planner", "Currency Converter"]
-)
-
+# -------------------- Travel Budget Planner --------------------
 if page == "Travel Budget Planner":
     show_trip_budget_page()
+
+    # Only show AI Advisor if budget is calculated
+    if st.session_state.get("budget_calculated", False):
+        st.markdown("---")
+        st.subheader("🤖 AI Travel Advisor Insights")
+
+        destination = st.session_state.get("destination", "Unknown")
+        try:
+            advisor = TravelAdvisor(api_key=GEMINI_API_KEY)  # Pass Gemini API key here
+            ai_insights = advisor.generate_advice(
+                destination=destination,
+                total_budget=float(st.session_state.get("total_budget", 0)),
+                currency=st.session_state.get("currency", "USD"),
+                duration_days=int(st.session_state.get("duration_days", 1)),
+                remaining_budget=float(st.session_state.get("remaining_budget", 0)),
+                total_spent=float(st.session_state.get("total_spent", 0)),
+                expense_summary=st.session_state.get("expense_summary", {}),
+            )
+            st.info(ai_insights)
+        except Exception as e:
+            st.error(f"Could not load AI Insights: {e}")
+
 else:
     show_currency_converter_page()

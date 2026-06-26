@@ -67,9 +67,4 @@ class Holiday_checker:
                 print("The selected date is a public holiday")
             else:
                 print("The selected date is not on a public holiday ")
-
-Check = Holiday_checker()
-country_code = input("Enter the country code(e.g NG, US, GB): ").upper().strip()
-trip_date = input("Enter the travel date (YYYY-MM-DD): ")
-Check.main(country_code, trip_date)
         

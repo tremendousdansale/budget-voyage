@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 from dotenv import load_dotenv
 import os
+from holiday_tracker import Holiday_checker
 
 # Load environment variables (make sure GEMINI_API_KEY is in your .env file)
 load_dotenv()
@@ -16,7 +17,7 @@ st.set_page_config(page_title="Currency and Travel Budget Planner")
 st.sidebar.title("Menu")
 page = st.sidebar.radio(
     "Choose a section",
-    ["Travel Budget Planner", "Currency Converter"],
+    ["Travel Budget Planner", "Currency Converter", "Holiday Tracker"],
 )
 
 # -------------------- Currency Converter --------------------
@@ -59,7 +60,6 @@ def show_currency_converter_page():
             st.error(str(err))
         except Exception as err:
             st.error(f"An unexpected error occurred: {err}")
-
 # -------------------- Travel Budget Planner --------------------
 if page == "Travel Budget Planner":
     show_trip_budget_page()
@@ -85,5 +85,9 @@ if page == "Travel Budget Planner":
         except Exception as e:
             st.error(f"Could not load AI Insights: {e}")
 
+elif page == "Holiday Checker":
+    checker = Holiday_checker()
+    checker.show_holiday_checker_page()
+    
 else:
     show_currency_converter_page()
